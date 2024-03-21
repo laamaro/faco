@@ -10,9 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_22_230643) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_21_213849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cart_ceramics", force: :cascade do |t|
+    t.bigint "cart_id", null: false
+    t.bigint "ceramic_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id"], name: "index_cart_ceramics_on_cart_id"
+    t.index ["ceramic_id"], name: "index_cart_ceramics_on_ceramic_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
+  create_table "ceramics", force: :cascade do |t|
+    t.string "name"
+    t.string "size"
+    t.string "color"
+    t.integer "disponibility"
+    t.float "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -22,8 +49,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_22_230643) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "cart_ceramics", "carts"
+  add_foreign_key "cart_ceramics", "ceramics"
+  add_foreign_key "carts", "users"
 end
