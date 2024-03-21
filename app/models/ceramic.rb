@@ -1,0 +1,2 @@
+class Ceramic < ApplicationRecord
+end
